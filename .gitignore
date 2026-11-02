@@ -1,0 +1,14 @@
+.venv/
+.env
+.env.*
+data/*.db
+data/*.db-*
+*.sqlite
+*.sqlite3
+data/corpus/.migrate_cache.json
+logs/
+__pycache__/
+*.pyc
+.DS_Store
+.screenshots/
+.trae-html-share-packages/

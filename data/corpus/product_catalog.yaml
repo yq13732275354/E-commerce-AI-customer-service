@@ -1,0 +1,80 @@
+# 商品事实表（产品咨询语料的唯一真值来源）
+# 说明：参数为本地测试用示例数据，参考公开电商商品页与行业标准整理，不代表任何品牌官方参数。
+# 规则：答案只能引用本文件的字段；价格/库存/活动/时效不得写死，必须用占位符。
+version: 1
+updated_at: 2026-11-01
+shop_id: default
+
+products:
+  - product_id: p1_dining_chair
+    name: 白蜡木餐椅
+    category: 餐椅
+    sku_ids: [p1-beige, p1-walnut, p1-black]
+    facts:
+      frame_material: 白蜡木实木框架
+      seat_filling: 高密度回弹海绵
+      surface_finish: 水性环保漆
+      formaldehyde: E1 级板材标准
+      seat_height_cm: 45
+      seat_width_cm: 44
+      seat_depth_cm: 42
+      total_height_cm: 80
+      footprint: 约 0.25 平方米
+      load_kg: 120
+      net_weight_kg: 5.8
+      assembly: 需自行组装，约 15 分钟，附内六角扳手与说明书
+      colors: 米白、胡桃、黑色
+      matching_table_height_cm: 75
+      care: 湿布擦拭，避免长期潮湿与暴晒
+    configurable:
+      price: "[当前售价]"
+      stock: "[库存状态]"
+      promo: "[活动信息]"
+      shipping: "[发货时效]"
+
+  - product_id: p2_bar_stool
+    name: 碳钢升降吧椅
+    category: 吧椅
+    sku_ids: [p2-black, p2-white]
+    facts:
+      frame_material: 碳钢框架 + 静电喷塑
+      seat_material: PU 皮革座面
+      base_diameter_cm: 38
+      seat_diameter_cm: 34
+      seat_height_min_cm: 63
+      seat_height_max_cm: 74
+      load_kg: 110
+      lift: 气杆升降，旋转 360 度
+      footrest: 环形脚踏
+      anti_slip: 底盘自带防滑脚垫
+      matching_counter_height_cm: 90-105
+      assembly: 需自行组装，约 10 分钟
+      care: PU 面用湿布擦拭，避免暴晒与尖锐物刮擦
+    configurable:
+      price: "[当前售价]"
+      stock: "[库存状态]"
+      promo: "[活动信息]"
+      shipping: "[发货时效]"
+
+  - product_id: p3_dress
+    name: 法式碎花连衣裙
+    category: 连衣裙
+    sku_ids: [p3-floral, p3-solid]
+    facts:
+      fabric: 65% 粘纤 + 35% 亚麻
+      lining: 100% 聚酯纤维里布
+      fabric_feature: 垂感好、透气，浅色系略有透光
+      size_chart:
+        S: {length_cm: 108, bust_cm: 86, waist_cm: 68}
+        M: {length_cm: 110, bust_cm: 90, waist_cm: 72}
+        L: {length_cm: 112, bust_cm: 94, waist_cm: 76}
+        XL: {length_cm: 114, bust_cm: 98, waist_cm: 80}
+      fit: 常规版型，腰部微收，建议按常穿尺码选
+      pockets: 有侧口袋
+      care: 30℃ 轻柔机洗或手洗，不可漂白，阴干，低温熨烫
+      shrink: 粘纤混纺首次下水可能轻微缩水，属正常现象
+    configurable:
+      price: "[当前售价]"
+      stock: "[库存状态]"
+      promo: "[活动信息]"
+      shipping: "[发货时效]"

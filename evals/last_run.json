@@ -1,0 +1,200 @@
+[
+  {
+    "q": "我买的什么时候发货？",
+    "expect": "logistics-1-1-1",
+    "actual": "logistics-1-1-1",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1632
+  },
+  {
+    "q": "发货后一般几天能到？",
+    "expect": "logistics-1-1-2",
+    "actual": "logistics-1-1-2",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1512
+  },
+  {
+    "q": "可以指定送达时间吗？",
+    "expect": "logistics-1-1-3",
+    "actual": "logistics-1-1-3",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1494
+  },
+  {
+    "q": "同城和省外分别多久能到？",
+    "expect": "logistics-1-1-4",
+    "actual": "logistics-1-1-4",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1299
+  },
+  {
+    "q": "快递延误了，晚了几天还没到怎么办？",
+    "expect": "logistics-1-1-5",
+    "actual": "logistics-1-1-5",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1512
+  },
+  {
+    "q": "你们一般发哪家快递？",
+    "expect": "logistics-1-1-6",
+    "actual": "logistics-1-1-6",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1763
+  },
+  {
+    "q": "物流好几天没更新，一直卡在一个地方",
+    "expect": "logistics-3-1-1",
+    "actual": "logistics-3-1-1",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1671
+  },
+  {
+    "q": "地址填错了，订单还没发货能改吗？",
+    "expect": "logistics-2-1-2",
+    "actual": "logistics-2-1-2",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 2199
+  },
+  {
+    "q": "搬家了，之前买的能改寄到新地址吗？",
+    "expect": "logistics-2-1-8",
+    "actual": "logistics-2-1-8",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 2230
+  },
+  {
+    "q": "收件人电话写错了影响收货怎么办？",
+    "expect": "logistics-2-1-6",
+    "actual": "logistics-2-1-6",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 2007
+  },
+  {
+    "q": "拒收以后怎么处理？",
+    "expect": "logistics-3-1-2",
+    "actual": "logistics-3-1-2",
+    "scenario": "logistics",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1112
+  },
+  {
+    "q": "信用卡一直支付失败怎么办？",
+    "expect": "payment-1-1-2",
+    "actual": "payment-1-1-2",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1207
+  },
+  {
+    "q": "扣了钱但订单显示未支付",
+    "expect": "payment-2-1-5",
+    "actual": "payment-2-1-5",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1049
+  },
+  {
+    "q": "我担心被重复扣款了",
+    "expect": "payment-2-1-2",
+    "actual": "payment-2-1-2",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1184
+  },
+  {
+    "q": "支付后页面卡住了，不知道成功没有",
+    "expect": "payment-2-1-4",
+    "actual": "payment-2-1-4",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1342
+  },
+  {
+    "q": "退款要多久才能到账？",
+    "expect": "payment-3-1-1",
+    "actual": "payment-3-1-1",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 951
+  },
+  {
+    "q": "优惠券用不了怎么办？",
+    "expect": "payment-2-1-11",
+    "actual": "payment-2-1-11",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1557
+  },
+  {
+    "q": "售后申请从哪里进去？",
+    "expect": "aftersales-1-1-1",
+    "actual": "aftersales-1-1-1",
+    "scenario": "aftersales",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1396
+  },
+  {
+    "q": "退货的运费谁来出？",
+    "expect": "aftersales-1-1-4",
+    "actual": "aftersales-1-1-4",
+    "scenario": "aftersales",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1382
+  },
+  {
+    "q": "过了七天无理由还能退货吗？",
+    "expect": "aftersales-2-1-2",
+    "actual": "aftersales-2-1-2",
+    "scenario": "aftersales",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1569
+  },
+  {
+    "q": "产品保修期是多久？",
+    "expect": "aftersales-2-1-1",
+    "actual": "aftersales-2-1-1",
+    "scenario": "aftersales",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1272
+  },
+  {
+    "q": "退款一直没到账怎么办？",
+    "expect": "payment-3-1-2",
+    "actual": "payment-3-1-2",
+    "scenario": "payment",
+    "fallback": "L0",
+    "ok": true,
+    "ms": 1843
+  }
+]

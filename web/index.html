@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>小咪 · 电商智能客服</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --line:#ebedf0;
+    --text:#1f2329;
+    --sub:#8f959e;
+    --bubble:#f0f1f3;
+    --brand:#0a84ff;
+    --chip-border:#d5d8dc;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+    background:#ededed;
+    color:var(--text);
+    display:flex;justify-content:center;align-items:center;
+  }
+  .phone{
+    width:430px;height:100vh;max-height:932px;
+    background:var(--bg);
+    display:flex;flex-direction:column;
+    position:relative;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,.04);
+  }
+  @media (max-width:520px){
+    body{background:#fff;align-items:stretch}
+    .phone{width:100%;height:100vh;max-height:none;box-shadow:none}
+  }
+
+  /* ---------- 顶部导航 ---------- */
+  header{
+    height:64px;flex:0 0 64px;display:flex;align-items:center;
+    padding:0 14px;gap:14px;background:#fff;
+    border-bottom:1px solid var(--line);
+  }
+  .icon-btn{
+    width:32px;height:32px;border:0;background:none;padding:0;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text);cursor:pointer;border-radius:8px;
+  }
+  .icon-btn:active{background:#f2f3f5}
+  .title{font-size:24px;font-weight:700;letter-spacing:.2px;flex:1}
+  .hamburger{width:26px;display:flex;flex-direction:column;gap:5px}
+  .hamburger i{display:block;height:2px;background:var(--text);border-radius:2px}
+
+  /* 调试态：会话状态条 */
+  .statusbar{
+    display:none;flex:0 0 auto;
+    padding:7px 14px;background:#f7f8fa;border-bottom:1px solid var(--line);
+    font:11px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#646a73;
+    gap:12px;flex-wrap:wrap;word-break:break-all;
+  }
+  .statusbar.show{display:flex}
+  .statusbar b{color:#0a84ff;font-weight:600}
+
+  /* 知识库角标 */
+  .kb-pill{
+    display:flex;flex-direction:column;align-items:flex-end;line-height:1.25;
+    font-size:10px;color:var(--sub);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  .kb-pill strong{font-size:13px;color:#1f2329;font-weight:600}
+
+  /* ---------- 内容区 ---------- */
+  main{flex:1;overflow-y:auto;padding:0 22px 16px;scroll-behavior:smooth}
+
+  /* 空态 */
+  .empty{display:flex;flex-direction:column;padding-top:96px}
+  .empty.hide{display:none}
+  .logo{
+    width:96px;height:96px;border-radius:22px;margin:0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#7fb0e8 0%,#5b9be0 55%,#4a8ed6 100%);
+  }
+  .empty h1{
+    margin:26px 0 0;text-align:center;
+    font-size:26px;font-weight:700;letter-spacing:.3px;
+  }
+  .welcome{
+    margin-top:26px;background:var(--bubble);border-radius:8px;
+    padding:16px 18px;font-size:19px;line-height:1.62;
+  }
+  .chips{margin-top:16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+  .chip{
+    background:#fff;border:1px solid var(--chip-border);border-radius:6px;
+    padding:11px 16px;font-size:18px;color:var(--text);
+    font-family:inherit;cursor:pointer;text-align:left;
+  }
+  .chip:active{background:#f7f8fa}
+
+  /* 消息流 */
+  .msgs{display:flex;flex-direction:column;gap:18px;padding-top:22px}
+  .msg{display:flex;gap:10px;max-width:100%}
+  .msg.me{justify-content:flex-end}
+  .avatar{
+    width:32px;height:32px;border-radius:50%;flex:0 0 32px;
+    background:linear-gradient(160deg,#7fb0e8,#4a8ed6);
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:#fff;
+  }
+  .bubble{
+    background:var(--bubble);border-radius:8px;padding:13px 16px;
+    font-size:17px;line-height:1.68;white-space:pre-wrap;word-break:break-word;
+    max-width:calc(100% - 42px);
+  }
+  .msg.me .bubble{background:var(--brand);color:#fff}
+  .debug-tag{
+    display:none;margin-top:6px;font-size:11px;color:var(--sub);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;
+  }
+  .debug-tag.show{display:block}
+
+  .typing{display:flex;gap:5px;padding:16px}
+  .typing i{
+    width:7px;height:7px;border-radius:50%;background:#c2c6cd;
+    animation:blink 1.2s infinite;
+  }
+  .typing i:nth-child(2){animation-delay:.16s}
+  .typing i:nth-child(3){animation-delay:.32s}
+  @keyframes blink{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+  .sys-line{
+    align-self:center;font-size:13px;color:var(--sub);background:#f6f7f9;
+    padding:7px 14px;border-radius:100px;text-align:center;
+  }
+
+  /* ---------- 输入区 ---------- */
+  footer{
+    flex:0 0 auto;border-top:1px solid var(--line);background:#fff;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    display:flex;gap:10px;align-items:flex-end;
+  }
+  #input{
+    flex:1;border:1px solid var(--chip-border);border-radius:10px;
+    padding:12px 14px;font-size:17px;font-family:inherit;color:var(--text);
+    resize:none;outline:none;height:44px;max-height:120px;line-height:1.45;
+    background:#fff;
+  }
+  #input:focus{border-color:var(--brand)}
+  .send{
+    width:44px;height:44px;border:0;border-radius:10px;flex:0 0 44px;
+    background:var(--brand);color:#fff;font-size:17px;cursor:pointer;
+  }
+  .send:disabled{background:#c8dcf9;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="phone">
+  <header>
+    <button class="icon-btn" id="back" aria-label="返回">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 4 L7 12 L15 20"/>
+      </svg>
+    </button>
+    <div class="title">小咪 · 电商智能客服</div>
+    <div class="kb-pill" title="向量知识库">
+      <strong id="kb-count">—</strong>
+      <span id="kb-mode">检索中</span>
+    </div>
+    <button class="icon-btn" aria-label="菜单">
+      <span class="hamburger"><i></i><i></i><i></i></span>
+    </button>
+  </header>
+
+  <div class="statusbar" id="statusbar"></div>
+
+  <main id="main">
+    <section class="empty" id="empty">
+      <div class="logo">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <path d="M12 18h10v-3.2a3.4 3.4 0 016.8 0V18h6.4v-3.2a3.4 3.4 0 016.8 0V18H46l-2.2 22H14.2L12 18z" fill="#f5b544"/>
+          <rect x="23" y="22" width="12" height="14" rx="2" fill="#ffffff" opacity=".95"/>
+          <rect x="35" y="24" width="9" height="12" rx="2" fill="#f26d5b" opacity=".95"/>
+          <circle cx="18" cy="30" r="2" fill="#ffffff" opacity=".7"/>
+          <circle cx="22" cy="34" r="1.6" fill="#ffffff" opacity=".5"/>
+          <circle cx="41" cy="37" r="1.6" fill="#ffffff" opacity=".6"/>
+          <path d="M20 42h17" stroke="#ffffff" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>电商智能客服小咪</h1>
+      <div class="welcome">你好，我是小咪，你的专属客服。商品、物流、支付、售后问题都可以问我～</div>
+      <div class="chips">
+        <button class="chip">餐椅座高是多少？</button>
+        <button class="chip">吧椅承重多少</button>
+        <button class="chip">我买的什么时候发货？</button>
+        <button class="chip">扣了钱但订单显示未支付</button>
+        <button class="chip">退货的运费谁来出？</button>
+      </div>
+    </section>
+
+    <div class="msgs" id="msgs"></div>
+  </main>
+
+  <footer>
+    <textarea id="input" rows="1" placeholder="请输入你的问题"></textarea>
+    <button class="send" id="send" aria-label="发送">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12l16-8-6 8 6 8-16-8z"/>
+      </svg>
+    </button>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+ * 前端接后端 SSE：POST /chat/stream，按 \n\n 切帧解析
+ * 事件：meta → stage → delta → done / error（方案 §3.6）
+ * ============================================================ */
+const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
+const SCENE_NAME = { product:'商品', logistics:'物流', payment:'支付', aftersales:'售后', none:'未识别' };
+
+const S = { sessionId:null, active:null, offered:[], turns:0, mode:'—', score:null, kb:null };
+
+const els = {
+  empty: document.getElementById('empty'),
+  msgs: document.getElementById('msgs'),
+  main: document.getElementById('main'),
+  input: document.getElementById('input'),
+  send: document.getElementById('send'),
+  statusbar: document.getElementById('statusbar'),
+  kbCount: document.getElementById('kb-count'),
+  kbMode: document.getElementById('kb-mode'),
+};
+
+let busy = false;
+
+async function loadHealth(){
+  try{
+    const res = await fetch('/health');
+    const d = await res.json();
+    S.kb = d.kb;
+    S.mode = d.retrieval_mode || '—';
+    els.kbCount.textContent = (d.kb && d.kb.pairs) ? d.kb.pairs + ' 条' : '—';
+    els.kbMode.textContent = (d.kb && d.kb.embed_model) ? d.kb.embed_model.replace('text-embedding-','emb-') : S.mode;
+    renderStatus();
+  }catch(e){ /* 静默：服务未启动时页面仍可展示 */ }
+}
+
+function renderStatus(){
+  if(!DEBUG) return;
+  els.statusbar.classList.add('show');
+  const sid = S.sessionId ? S.sessionId.slice(0,8) : '—';
+  els.statusbar.innerHTML =
+    '检索 <b>' + (S.mode || '—') + '</b>' +
+    ' · 场景 <b>' + SCENE_NAME[S.active || 'none'] + '</b>' +
+    ' · 轮次 <b>' + S.turns + '</b>' +
+    ' · 上轮相似度 <b>' + (S.score == null ? '—' : S.score.toFixed(3)) + '</b>' +
+    ' · 知识对 <b>' + (S.kb ? S.kb.pairs : '—') + '</b>' +
+    ' · 向量 <b>' + (S.kb ? S.kb.vectors : '—') + '</b>' +
+    ' · 会话 <b>' + sid + '</b>' +
+    (S.offered.length ? ' · ' + S.offered.join(', ') : '');
+}
+
+function scrollBottom(){ els.main.scrollTop = els.main.scrollHeight; }
+
+function addUser(text){
+  els.empty.classList.add('hide');
+  const row = document.createElement('div');
+  row.className = 'msg me';
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  b.textContent = text;
+  row.appendChild(b);
+  els.msgs.appendChild(row);
+  scrollBottom();
+}
+
+function addSystem(text){
+  const sys = document.createElement('div');
+  sys.className = 'sys-line';
+  sys.textContent = text;
+  els.msgs.appendChild(sys);
+  scrollBottom();
+}
+
+function makeBotRow(){
+  const row = document.createElement('div');
+  row.className = 'msg';
+  const av = document.createElement('div');
+  av.className = 'avatar';
+  av.textContent = '咪';
+  const wrap = document.createElement('div');
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  const tag = document.createElement('div');
+  tag.className = 'debug-tag';
+  wrap.appendChild(b);
+  wrap.appendChild(tag);
+  row.appendChild(av);
+  row.appendChild(wrap);
+  return { row, bubble:b, tag };
+}
+
+function addTyping(){
+  const row = document.createElement('div');
+  row.className = 'msg';
+  row.id = 'typing';
+  row.innerHTML = '<div class="avatar">咪</div><div class="bubble typing"><i></i><i></i><i></i></div>';
+  els.msgs.appendChild(row);
+  scrollBottom();
+}
+function removeTyping(){
+  const t = document.getElementById('typing');
+  if(t) t.remove();
+}
+
+/* 解析 SSE 帧 */
+function parseFrame(frame){
+  let event = 'message', data = '';
+  for(const line of frame.split('\n')){
+    if(line.startsWith('event:')) event = line.slice(6).trim();
+    else if(line.startsWith('data:')) data += line.slice(5).trim();
+  }
+  if(!data) return null;
+  try { return { event, data: JSON.parse(data) }; }
+  catch { return null; }
+}
+
+async function send(text){
+  if(busy || !text.trim()) return;
+  busy = true;
+  els.send.disabled = true;
+  addUser(text.trim());
+  els.input.value = '';
+  els.input.style.height = '44px';
+  addTyping();
+
+  let row = null, bubble = null, tag = null, gotText = false;
+
+  try {
+    const res = await fetch('/chat/stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: S.sessionId, message: text.trim() })
+    });
+    if(!res.ok || !res.body) throw new Error('HTTP ' + res.status);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while(true){
+      const { value, done } = await reader.read();
+      if(done) break;
+      buf += decoder.decode(value, { stream:true });
+      const frames = buf.split('\n\n');
+      buf = frames.pop();
+
+      for(const frame of frames){
+        const ev = parseFrame(frame);
+        if(!ev) continue;
+        const d = ev.data;
+
+        if(ev.event === 'meta'){
+          S.sessionId = d.session_id;
+          if(d.retrieval_mode) S.mode = d.retrieval_mode;
+          renderStatus();
+        } else if(ev.event === 'delta'){
+          if(!row){
+            removeTyping();
+            const bot = makeBotRow();
+            row = bot.row; bubble = bot.bubble; tag = bot.tag;
+            els.msgs.appendChild(row);
+          }
+          gotText = true;
+          bubble.textContent += d.text;
+          scrollBottom();
+        } else if(ev.event === 'done'){
+          S.active = d.scenario;
+          S.turns += 1;
+          S.score = d.top_score == null ? null : d.top_score;
+          if(d.plan_code && !S.offered.includes(d.plan_code)) S.offered.push(d.plan_code);
+          if(DEBUG && row && tag){
+            tag.classList.add('show');
+            tag.textContent = (d.plan_code || 'general') + ' · ' + d.fallback_level +
+              ' · score=' + (d.top_score == null ? '—' : d.top_score.toFixed(3)) +
+              ' · followup=' + (d.is_followup ? '1' : '0') +
+              ' · ' + d.latency_ms + 'ms' +
+              ' · active=' + (S.active || 'none');
+          }
+          renderStatus();
+        } else if(ev.event === 'error'){
+          removeTyping();
+          addSystem(d.message || '服务出错了');
+        }
+      }
+    }
+  } catch(e){
+    removeTyping();
+    addSystem('连接失败：' + e.message + '（确认本地服务已启动）');
+  } finally {
+    removeTyping();
+    if(!gotText && !row) addSystem('没有收到回复，请再试一次');
+    busy = false;
+    els.send.disabled = false;
+    els.input.focus();
+    scrollBottom();
+  }
+}
+
+els.send.addEventListener('click', () => send(els.input.value));
+els.input.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(els.input.value); }
+});
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => send(c.textContent));
+});
+els.input.addEventListener('input', () => {
+  els.input.style.height = '44px';
+  els.input.style.height = Math.min(els.input.scrollHeight, 120) + 'px';
+});
+
+renderStatus();
+loadHealth();
+</script>
+</body>
+</html>
